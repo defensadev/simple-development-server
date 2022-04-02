@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts"],
+  "sourcesContent": ["console.log(\"WS Reload System\");\nconsole.log(\"changing files in /src or /public cause the server to reload!\");\nconsole.log(\"try it with `yarn start` or `npm run start`\");\n"],
+  "mappings": "MAAA,QAAQ,IAAI,kBAAkB,EAC9B,QAAQ,IAAI,+DAA+D,EAC3E,QAAQ,IAAI,6CAA6C",
+  "names": []
+}
