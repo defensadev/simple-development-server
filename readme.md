@@ -2,6 +2,9 @@
 
 a straight forward server, for building typescript / tailwindcss web apps.
 
+- HTML - work with html with tailwindcss inside the /public directory
+- TS - work with typescript inside the /src directory
+
 ## initialization
 
 you'll need to init the project after cloning the project.

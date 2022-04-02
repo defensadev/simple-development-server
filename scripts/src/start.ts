@@ -1,4 +1,3 @@
-import fs from "fs";
 import http from "http";
 
 import chokidar from "chokidar";
@@ -7,10 +6,8 @@ import morgan from "morgan";
 import open from "open";
 import ws from "ws";
 
-import { CSS, JS } from "./builder";
-import { dirname, PORT, publicDir, OPEN_BROWSER, srcDir } from "./env";
-
-let wsJS: string | null = null;
+import { CSS, JS, useDevTools } from "./utils";
+import { PORT, publicDir, OPEN_BROWSER, srcDir } from "./env";
 
 const webApp = express();
 const httpServer = http.createServer(webApp);
@@ -31,24 +28,13 @@ httpServer.on("upgrade", (req, socket, head) =>
 
 webApp.use(morgan("dev"));
 webApp.use("/", async (req, res, next) => {
-  if (req.url === "/") {
-    try {
-      if (!wsJS) {
-        wsJS =
-          "<script>" +
-          (await fs.promises.readFile(dirname.wsJS, "utf-8")) +
-          "</script></head>";
-      }
-      const rawHTML = await fs.promises.readFile(publicDir.indexHTML, "utf-8");
-      const html = rawHTML.replace("</head>", wsJS);
-      res.setHeader("Content-Type", "text/html");
-      res.status(200).send(html);
-      return;
-    } catch (err) {
-      console.error(err);
-    }
+  const html = await useDevTools(req.url);
+  if (!html) {
+    next();
+    return;
   }
-  next();
+  res.setHeader("Content-Type", "text/html");
+  res.status(200).send(html);
 });
 webApp.use(express.static(publicDir.path));
 

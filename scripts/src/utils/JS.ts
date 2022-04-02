@@ -1,6 +1,8 @@
 import { build } from "esbuild";
 
-import { FS_DEBOUNCE, publicDir, srcDir } from "../env";
+import { getEntryPoints } from "./getEntryPoints";
+
+import { FS_DEBOUNCE, publicDir } from "../env";
 
 let lastInvokaction: null | number = null;
 
@@ -11,7 +13,7 @@ export const JS = async (production: boolean) => {
   }
   lastInvokaction = invokactionTime;
 
-  const entryPoints = [srcDir.index];
+  const entryPoints = await getEntryPoints();
   const outdir = publicDir.path;
 
   await build({

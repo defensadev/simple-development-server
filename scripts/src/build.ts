@@ -1,4 +1,4 @@
-import { CSS, JS } from "./builder";
+import { CSS, JS } from "./utils";
 
 JS(true)
   .then(() => CSS(true))
