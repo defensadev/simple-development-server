@@ -22,7 +22,7 @@ npm run scripts-build
 
 ## start
 
-in start mode, you'll get auto page refreshes when the src or public directory change.
+in start mode, you'll get auto page refreshes when files in the /src or /public directory change.
 
 - using yarn
 
@@ -58,7 +58,7 @@ yarn start -d 200
 
 ## build
 
-in build mode, you'll get type checks with no server
+in build mode, you'll get type checks with no server and production optimizations like mimification.
 
 - using yarn
 
@@ -74,7 +74,7 @@ npm run build
 
 ## static
 
-in static mode, you'll simply serve the resources in public
+in static mode, you'll simply serve the resources in /public.
 
 - using yarn
 
