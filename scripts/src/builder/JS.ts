@@ -1,12 +1,12 @@
 import { build } from "esbuild";
 
-import { publicDir, srcDir } from "../env";
+import { FS_DEBOUNCE, publicDir, srcDir } from "../env";
 
 let lastInvokaction: null | number = null;
 
 export const JS = async () => {
   const invokactionTime = new Date().getTime();
-  if (lastInvokaction && invokactionTime - lastInvokaction <= 300) {
+  if (lastInvokaction && invokactionTime - lastInvokaction <= FS_DEBOUNCE) {
     return;
   }
   lastInvokaction = invokactionTime;

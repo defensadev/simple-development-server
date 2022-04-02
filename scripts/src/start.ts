@@ -4,10 +4,11 @@ import http from "http";
 import chokidar from "chokidar";
 import express from "express";
 import morgan from "morgan";
+import open from "open";
 import ws from "ws";
 
 import { CSS, JS } from "./builder";
-import { dirname, PORT, publicDir, srcDir } from "./env";
+import { dirname, PORT, publicDir, OPEN_BROWSER, srcDir } from "./env";
 
 let wsJS: string | null = null;
 
@@ -71,5 +72,7 @@ WebSocketServer.on("connection", (ws) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log("listening on port", PORT, `\nhttp://localhost:${PORT}/`);
+  const url = `http://localhost:${PORT}/`;
+  console.log("listening on port", PORT, "\n" + url);
+  OPEN_BROWSER && open(url);
 });

@@ -5,14 +5,14 @@ import cssnano from "cssnano";
 import postcss from "postcss";
 import tailwindcss from "tailwindcss";
 
-import { dirname, publicDir } from "../env";
+import { dirname, FS_DEBOUNCE, publicDir } from "../env";
 
 let mainCSS: null | string = null;
 let lastInvokaction: null | number = null;
 
 export const CSS = async () => {
   const invokactionTime = new Date().getTime();
-  if (lastInvokaction && invokactionTime - lastInvokaction <= 300) {
+  if (lastInvokaction && invokactionTime - lastInvokaction <= FS_DEBOUNCE) {
     return;
   }
   lastInvokaction = invokactionTime;
