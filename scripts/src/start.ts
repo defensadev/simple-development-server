@@ -35,10 +35,7 @@ webApp.use("/", async (req, res, next) => {
     if (!wsJS) {
       wsJS =
         "<script>" +
-        (await fs.promises.readFile(dirname.wsJS, "utf-8")).replace(
-          "{{PORT}}",
-          PORT.toString()
-        ) +
+        (await fs.promises.readFile(dirname.wsJS, "utf-8")) +
         "</script></head>";
     }
     const rawHTML = await fs.promises.readFile(publicDir.indexHTML, "utf-8");
