@@ -32,17 +32,21 @@ httpServer.on("upgrade", (req, socket, head) =>
 webApp.use(morgan("dev"));
 webApp.use("/", async (req, res, next) => {
   if (req.url === "/") {
-    if (!wsJS) {
-      wsJS =
-        "<script>" +
-        (await fs.promises.readFile(dirname.wsJS, "utf-8")) +
-        "</script></head>";
+    try {
+      if (!wsJS) {
+        wsJS =
+          "<script>" +
+          (await fs.promises.readFile(dirname.wsJS, "utf-8")) +
+          "</script></head>";
+      }
+      const rawHTML = await fs.promises.readFile(publicDir.indexHTML, "utf-8");
+      const html = rawHTML.replace("</head>", wsJS);
+      res.setHeader("Content-Type", "text/html");
+      res.status(200).send(html);
+      return;
+    } catch (err) {
+      console.error(err);
     }
-    const rawHTML = await fs.promises.readFile(publicDir.indexHTML, "utf-8");
-    const html = rawHTML.replace("</head>", wsJS);
-    res.setHeader("Content-Type", "text/html");
-    res.status(200).send(html);
-    return;
   }
   next();
 });
