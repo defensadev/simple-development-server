@@ -27,6 +27,7 @@ export const JS = async (production: boolean) => {
     minifyWhitespace: production,
     platform: "browser",
     outdir,
+    treeShaking: production,
     sourcemap: true,
   });
 
