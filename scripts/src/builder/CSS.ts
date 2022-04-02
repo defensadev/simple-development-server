@@ -10,7 +10,29 @@ import { dirname, FS_DEBOUNCE, publicDir } from "../env";
 let mainCSS: null | string = null;
 let lastInvokaction: null | number = null;
 
-export const CSS = async () => {
+const productionProcessor = postcss(
+  tailwindcss({
+    content: [publicDir.CSScontent],
+    theme: {
+      extend: {},
+    },
+    plugins: [],
+  }),
+  autoprefixer(),
+  cssnano()
+);
+
+const developmentProcessor = postcss(
+  tailwindcss({
+    content: [publicDir.CSScontent],
+    theme: {
+      extend: {},
+    },
+    plugins: [],
+  })
+);
+
+export const CSS = async (production: boolean) => {
   const invokactionTime = new Date().getTime();
   if (lastInvokaction && invokactionTime - lastInvokaction <= FS_DEBOUNCE) {
     return;
@@ -21,17 +43,7 @@ export const CSS = async () => {
     mainCSS = await fs.promises.readFile(dirname.mainCSS, "utf-8");
   }
 
-  const processor = postcss(
-    tailwindcss({
-      content: [publicDir.CSScontent],
-      theme: {
-        extend: {},
-      },
-      plugins: [],
-    }),
-    autoprefixer(),
-    cssnano()
-  );
+  const processor = production ? productionProcessor : developmentProcessor;
 
   const out = await processor.process(mainCSS, {
     to: publicDir.indexCSS,

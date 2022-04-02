@@ -21,7 +21,7 @@ const WebSocketServer = new ws.Server({
 const srcWatcher = chokidar.watch(srcDir.path, { ignoreInitial: true });
 const publicWatcher = chokidar.watch(publicDir.path, { ignoreInitial: true });
 
-srcWatcher.on("change", () => JS().then(() => CSS()));
+srcWatcher.on("change", () => JS(false).then(() => CSS(false)));
 
 httpServer.on("upgrade", (req, socket, head) =>
   WebSocketServer.handleUpgrade(req, socket, head, (ws, wsReq) =>
@@ -54,7 +54,7 @@ WebSocketServer.on("connection", (ws) => {
       ws.close(1000, "reload");
       return;
     }
-    CSS();
+    CSS(false);
   };
 
   publicWatcher.on("change", listener);
