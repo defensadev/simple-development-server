@@ -1,3 +1,4 @@
+export * from "./cleanUp";
 export * from "./CSS";
 export * from "./getEntryPoints";
 export * from "./JS";

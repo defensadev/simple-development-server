@@ -3,18 +3,20 @@ import fs from "fs";
 
 import { srcDir } from "../env";
 
-export const getEntryPoints = async (dir?: string): Promise<Array<string>> => {
-  if (!dir) {
-    return await getEntryPoints(srcDir.path);
-  }
+export const getEntryPoints = async (
+  dir?: string,
+  ending?: string
+): Promise<Array<string>> => {
+  const endingDefault = ending ? ending : ".entry.ts";
+  const dirDefault = dir ? dir : srcDir.path;
 
-  const files = await fs.promises.readdir(dir);
+  const files = await fs.promises.readdir(dirDefault);
 
   return await Promise.all(
     files.map(async (file) => {
-      const fullPath = path.resolve(dir, file);
+      const fullPath = path.resolve(dirDefault, file);
 
-      if (file.endsWith(".entry.ts")) {
+      if (file.endsWith(endingDefault)) {
         return [fullPath];
       }
 

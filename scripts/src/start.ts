@@ -6,7 +6,7 @@ import morgan from "morgan";
 import open from "open";
 import ws from "ws";
 
-import { CSS, JS, useDevTools } from "./utils";
+import { cleanUp, CSS, JS, useDevTools } from "./utils";
 import { PORT, publicDir, OPEN_BROWSER, srcDir } from "./env";
 
 const webApp = express();
@@ -19,6 +19,8 @@ const srcWatcher = chokidar.watch(srcDir.path, { ignoreInitial: true });
 const publicWatcher = chokidar.watch(publicDir.path, { ignoreInitial: true });
 
 srcWatcher.on("change", () => JS(false).then(() => CSS(false)));
+srcWatcher.on("unlink", (p) => cleanUp(p));
+srcWatcher.on("unlinkDir", () => cleanUp());
 
 httpServer.on("upgrade", (req, socket, head) =>
   WebSocketServer.handleUpgrade(req, socket, head, (ws, wsReq) =>
@@ -58,8 +60,12 @@ WebSocketServer.on("connection", (ws) => {
   console.log("WS opened!");
 });
 
-httpServer.listen(PORT, () => {
-  const url = `http://localhost:${PORT}/`;
-  console.log("listening on port", PORT, "\n" + url);
-  OPEN_BROWSER && open(url);
-});
+JS(false)
+  .then(() => CSS(false))
+  .then(() => {
+    httpServer.listen(PORT, () => {
+      const url = `http://localhost:${PORT}/`;
+      console.log("listening on port", PORT, "\n" + url);
+      OPEN_BROWSER && open(url);
+    });
+  });
